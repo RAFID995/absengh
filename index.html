@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Input Data Guru</title>
+
+<!-- Supabase cukup 1x saja -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#2563eb,#60a5fa);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.card{
+  background:white;
+  width:420px;
+  padding:30px;
+  border-radius:16px;
+  box-shadow:0 15px 30px rgba(0,0,0,.2);
+}
+
+h2{text-align:center;color:#2563eb}
+
+.group{margin-bottom:14px}
+
+label{font-weight:600}
+
+input,select,textarea{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  margin-top:5px;
+}
+
+textarea{height:70px}
+
+button{
+  width:100%;
+  margin-top:15px;
+  padding:12px;
+  background:#2563eb;
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>📘 Input Data Guru</h2>
+
+<form id="guruForm">
+
+  <div class="group">
+    <label>NBM</label>
+    <input type="text" id="nbm" required>
+  </div>
+
+  <div class="group">
+    <label>Nama</label>
+    <input type="text" id="nama" required>
+  </div>
+
+  <div class="group">
+    <label>Tempat Lahir</label>
+    <input type="text" id="tempat">
+  </div>
+
+  <div class="group">
+    <label>Tanggal Lahir</label>
+    <input type="date" id="tanggal">
+  </div>
+
+  <div class="group">
+    <label>Jenis Kelamin</label>
+    <select id="jk">
+      <option value="">Pilih</option>
+      <option value="Laki-laki">Laki-laki</option>
+      <option value="Perempuan">Perempuan</option>
+    </select>
+  </div>
+
+  <div class="group">
+    <label>Alamat</label>
+    <textarea id="alamat"></textarea>
+  </div>
+
+  <div class="group">
+    <label>No HP</label>
+    <input type="text" id="hp">
+  </div>
+
+  <button type="submit">💾 Simpan Data</button>
+
+</form>
+</div>
+
+<script>
+const client = supabase.createClient(
+  "https://dkeepcrjwbqlykbbwyhk.supabase.co",
+  "sb_publishable_9lLy2AWtFRQg9P6T0GWMyQ_vD7aIzEI"
+);
+
+document.getElementById("guruForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const payload = {
+    "NBM": document.getElementById("nbm").value,
+    "Nama": document.getElementById("nama").value,
+    "Tempat_lahir": document.getElementById("tempat").value,
+    "Tanggal_lahir": document.getElementById("tanggal").value,
+    "Jenis_kelamin": document.getElementById("jk").value,
+    "Alamat": document.getElementById("alamat").value,
+    "No_hp": document.getElementById("hp").value
+  };
+
+  const { error } = await client
+    .from("guru")
+    .insert([payload]);
+
+  if(error){
+    console.error(error);
+    alert("❌ Gagal: " + error.message);
+  } else {
+    alert("✅ Data berhasil masuk Supabase!");
+    e.target.reset();
+  }
+});
+</script>
+
+</body>
+</html>
